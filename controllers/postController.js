@@ -81,7 +81,8 @@ const commentHandler = async (req,res)=>{
                     comments: { user: userId, text: text }
                 } 
             },
-            { new: true }
+            { returnDocument: 'after' } // ye new:true ka replacement hai, isse newComment me after update wali value aaegi, agr purani value chahiye to returnDocument:'before' krna hoga
+            
         )
         return res.status(200).json({msg:"success",comment:newComment});
 
