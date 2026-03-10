@@ -20,8 +20,27 @@ const createPost = async (req,res)=>{
         })
         return res.json({msg:'Post created successfully',newPost});
     } catch (error) {
-        return res.status(401).json({msg:'Error during creating post',error:error.message});
+        return res.status(500).json({msg:'Error during creating post',error:error.message});
     }
 }
 
-module.exports = {createPost};
+const readPost = async (req,res)=>{
+    try {
+        const userId = req.params.id;
+        
+        const posts = await userModel.findById(userId).populate({
+            path:'posts',
+            select:'content -_id'
+        }).select('posts -_id');
+
+        if(!posts) return res.status(404).json({msg:"invalid user id"});
+        // posts = {posts:[...array of posts]}
+
+        return res.json({posts:posts.posts});
+        
+    } catch (error) {
+        return res.status(500).json({msg:error.message});
+    }
+}
+
+module.exports = {createPost,readPost};
