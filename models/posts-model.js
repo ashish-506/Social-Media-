@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
 
 const postSchema = mongoose.Schema({
-    userid:{
+    userId:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'users'
     },
     content:{
         type: String,
+        required:[true,'Write something to post'],
         trim: true,
         maxLength: [2000, "Post cannot exceed 2000 characters"]
     },
@@ -21,7 +22,7 @@ const postSchema = mongoose.Schema({
         },
         text:{
             type: String, 
-            required: true,
+            required: [true,'comment content is empty'],
             trim: true
         },
     }]

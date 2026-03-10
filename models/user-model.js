@@ -22,7 +22,7 @@ const userSchema = mongoose.Schema({
         unique:true,
         match:[/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,"enter a valid email"]
     },
-    post:[
+    posts:[
         {
             type: mongoose.Schema.Types.ObjectId,
             ref:'posts'
