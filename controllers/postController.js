@@ -1,3 +1,4 @@
+const { isObjectIdOrHexString } = require('mongoose');
 const postModel = require('../models/posts-model');
 const userModel = require('../models/user-model');
 
@@ -27,7 +28,7 @@ const createPost = async (req,res)=>{
 const readPost = async (req,res)=>{
     try {
         const userId = req.params.id;
-        
+
         const posts = await userModel.findById(userId).populate({
             path:'posts',
             select:'content -_id'
@@ -43,4 +44,49 @@ const readPost = async (req,res)=>{
     }
 }
 
-module.exports = {createPost,readPost};
+const likeHandler = async (req,res)=>{
+    try {
+        const postId = req.params.id;
+        const {userId} = req.user;
+
+        const post = await postModel.findById(postId);
+        if(!post) return res.status(404).json({msg:"post not found"});
+        
+        if(post.likes.includes(userId)) post.likes.pull(userId);
+        else post.likes.push(userId);
+
+        await post.save();
+
+        return res.status(200).json({post});
+
+    } catch (error) {
+        return res.status(500).json({msg:error.message});
+    }
+    
+}
+const commentHandler = async (req,res)=>{
+    try {
+        const postId = req.params.id;
+        const {userId} = req.user;
+        const {text} = req.body;
+
+        if (!text || text.trim() === "") {
+            return res.status(400).json({ msg: "Comment text is required" });
+        }
+
+        const newComment = await postModel.findByIdAndUpdate(
+            postId,
+            { 
+                $push:{
+                    comments: { user: userId, text: text }
+                } 
+            },
+            { new: true }
+        )
+        return res.status(200).json({msg:"success",comment:newComment});
+
+    } catch (error) {
+        return res.status(500).json({msg:error.message});
+    }
+}
+module.exports = {createPost,readPost,likeHandler,commentHandler};
