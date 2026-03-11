@@ -28,14 +28,6 @@ const userSchema = mongoose.Schema({
             ref:'posts'
         },
     ],
-    friends:[{
-        type: mongoose.Schema.Types.ObjectId,
-        ref:'users'
-    }],
-    requests:[{
-        type: mongoose.Schema.Types.ObjectId,
-        ref:'users'
-    }]
 });
 
 userSchema.pre('save', async function(){
