@@ -130,17 +130,30 @@ const myFollowers = async (req,res)=>{
     try {
         const recipient = req.user.userId;
         
-        const followers = await connectModel.find({recipient,status:'accepted'}).populate({path:'requester',select:'username -_id'}).select('requester -_id');
+        const connection = await connectModel.find({recipient,status:'accepted'})
+            .populate({
+                path:'requester',
+                select:'username -_id'
+            })
+            .select('requester -_id');
+
+        const followers = connection.map(conn => conn.requester);
         return res.status(200).json({followers});
     } catch (error) {
         return res.status(500).json({msg:error.message});
     }
 }
-
+``
 const myfollowing = async (req,res)=>{
     try {
         const requester = req.user.userId;
-        const followers = await connectModel.find({requester,status:'accepted'}).populate({path:'recipient',select:'username -_id'}).select('recipient -_id');
+        const followers =(await connectModel.find({requester,status:'accepted'})
+            .populate({
+                path:'recipient',
+                select:'username -_id'
+            })
+            .select('recipient -_id')).map(conn=>conn.recipient);
+            
         return res.status(200).json({followers});
     } catch (error) {
         return res.status(500).json({msg:error.message});

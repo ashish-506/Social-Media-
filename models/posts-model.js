@@ -7,8 +7,8 @@ const postSchema = mongoose.Schema({
     },
     content:{
         type: String,
-        required:[true,'Write something to post'],
         trim: true,
+        required:[true,'Write something to post'],
         maxLength: [2000, "Post cannot exceed 2000 characters"]
     },
     likes:[{

@@ -90,4 +90,67 @@ const commentHandler = async (req,res)=>{
         return res.status(500).json({msg:error.message});
     }
 }
-module.exports = {createPost,readPost,likeHandler,commentHandler};
+const getExplore = async (req,res)=>{
+    try {
+        const posts = (await postModel.find()
+            .sort({ _id: -1 }) 
+            .limit(50)
+            .populate({
+                path:'userId',
+                select:'username -_id'
+            }).select('content userId')).map(cont=>{ 
+                return {
+                    postId:cont._id,
+                    username:cont.userId?.username || "Unknown User",
+                    content:cont.content
+                }});
+        
+        return res.status(200).json({posts});
+    } catch (error) {
+        return res.status(500).json({msg:error.message});
+    }
+}
+
+const getPersonalFeed = async (req,res)=>{
+    try {
+        const myId = req.user.userId;
+
+        const connections = await connectModel.find({
+            status: 'accepted',
+            requester:myId
+        });
+
+        const friendIds = connections.map(conn => {
+            return conn.recipient;
+        });
+        friendIds.push(myId);
+
+        const posts = (await postModel.find({ 
+            userId: { $in: friendIds } 
+        })
+        .sort({ _id: -1 }) // Fastest time-based sorting
+        .limit(100)
+        .populate({
+            path:'userId',
+            select:'username -_id'
+        }).select('content userId'))
+            .map(cont=>{
+                return {
+                    postId:cont._id,
+                    username:cont.userId?.username || "Unknown User",
+                    content:cont.content}
+            });
+
+        return res.status(200).json({ posts });
+    } catch (error) {
+        return res.status(500).json({error:error.message});
+    }
+}
+module.exports = {
+    createPost,
+    readPost,
+    likeHandler,
+    commentHandler,
+    getExplore,
+    getPersonalFeed
+};
