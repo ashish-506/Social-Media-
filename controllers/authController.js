@@ -39,7 +39,7 @@ const loginUser = async (req,res)=>{
             return res.json({msg:"please enter username/email"});
         }
         
-        if(!validUser) return res.json({msg:'invalid credentials'});
+        if(!validUser) return res.status(404).json({msg:'invalid credentials'});
         
         user.username = validUser.username;
         const match = await bcrypt.compare(user.password,validUser.password);
@@ -49,9 +49,9 @@ const loginUser = async (req,res)=>{
             res.cookie('token',token,{ maxAge: 3600000, httpOnly: true });
             res.json({msg:"success"});
         }
-        else return res.json({msg:"invalid credentials"});
+        else return res.status(404).json({msg:"invalid credentials"});
     } catch (error) {
-        return res.json({msg:error});
+        return res.status(500).json({msg:error});
     }
 
 

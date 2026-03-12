@@ -1,6 +1,7 @@
 const { isObjectIdOrHexString } = require('mongoose');
 const postModel = require('../models/posts-model');
 const userModel = require('../models/user-model');
+const connectModel = require('../models/connection-model');
 
 const createPost = async (req,res)=>{
     try {
@@ -78,7 +79,7 @@ const commentHandler = async (req,res)=>{
             postId,
             { 
                 $push:{
-                    comments: { user: userId, text: text }
+                    comments: { userId, text: text }
                 } 
             },
             { returnDocument: 'after' } // ye {new:true} ka replacement hai, isse newComment me after update wali value aaegi, agr purani value chahiye to returnDocument:'before' krna hoga
