@@ -94,7 +94,7 @@ const commentHandler = async (req,res)=>{
 const getExplore = async (req,res)=>{
     try {
         const posts = (await postModel.find()
-            .sort({ _id: -1 }) 
+            .sort({ _id: -1 })
             .limit(50)
             .populate({
                 path:'userId',

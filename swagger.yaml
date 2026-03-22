@@ -5,7 +5,7 @@ info:
   description: API documentation for the Social Media backend
 
 servers:
-  - url: http://localhost:3000
+  - url: https://social-media-cbo2.onrender.com/api-docs/
 
 components:
 

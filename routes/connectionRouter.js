@@ -19,7 +19,7 @@ router.post('/send/:id',sendRequest);
 router.post('/accept/:id',acceptedRequest);
 router.post('/reject/:id',rejectRequest);
 router.post('/withdraw/:id',withdrawRequest);
-router.post('/remove/:id',removeFollower);
-router.post('/unfollow/:id',unfollow);
+router.delete('/remove/:id',removeFollower);
+router.delete('/unfollow/:id',unfollow);
 
 module.exports = router;

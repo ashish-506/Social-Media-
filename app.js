@@ -1,6 +1,6 @@
 require('dotenv').config();
-require('./config/mongoose-connect');
-
+const connection = require('./config/mongoose-connect');
+connection();
 const cookieParser = require('cookie-parser');
 const authRouter = require('./routes/authRouter');
 const postRouter = require('./routes/postRouter');
@@ -10,6 +10,7 @@ const app = express();
 
 const swaggerUi = require("swagger-ui-express");
 const YAML = require("yamljs");
+const { connection } = require('mongoose');
 
 const swaggerDocument = YAML.load("./swagger.yaml");
 
@@ -23,4 +24,7 @@ app.use('/auth',authRouter);
 app.use('/posts',postRouter);
 app.use('/connection',connectRouter);
 
-app.listen(3000,()=>{console.log(`server is listening on port 3000...`)});
+app.listen(3000,async ()=>{
+    await connection();
+    console.log(`server is listening on port 3000...`)
+});
