@@ -5,7 +5,10 @@ info:
   description: API documentation for the Social Media backend
 
 servers:
-  - url: https://social-media-cbo2.onrender.com/api-docs/
+  - url: https://social-media-cbo2.onrender.com
+    description: Production Server
+  - url: http://localhost:3000
+    description: Local Development Server
 
 components:
 
