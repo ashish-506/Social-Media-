@@ -1,6 +1,6 @@
 require('dotenv').config();
-const connection = require('./config/mongoose-connect');
-connection();
+const makeconnetction = require('./config/mongoose-connect');
+
 const cookieParser = require('cookie-parser');
 const authRouter = require('./routes/authRouter');
 const postRouter = require('./routes/postRouter');
@@ -25,6 +25,6 @@ app.use('/posts',postRouter);
 app.use('/connection',connectRouter);
 
 app.listen(3000,async ()=>{
-    await connection();
+    await makeconnetction();
     console.log(`server is listening on port 3000...`)
 });
