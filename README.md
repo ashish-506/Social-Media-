@@ -110,8 +110,8 @@ Implemented a deterministic state machine to manage user relationships:
 ### 1️⃣ Clone the Repository
 
 ```bash
-git clone <your-repo-url>
-cd <repo-name>
+git clone https://github.com/ashish-506/Social-Media-/tree/main
+cd Social-Media-
 ```
 
 ### 2️⃣ Install Dependencies
